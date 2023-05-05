@@ -1,0 +1,58 @@
+<div class="sc-post-upload-modal">
+  <div class="modal-header">
+    <h4 class="modal-title">Upload a post</h4>
+    <button type="button" class="close" (click)="activeModal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div *ngIf="!selectedFile"
+         class="sc-post-upload-modal__file-drop card card-body text-center"
+         ng2FileDrop
+         [ngClass]="{'sc-post-upload-modal__file-drop--over': hasBaseDropZoneOver}"
+         (fileOver)="fileOverBase($event)"
+         (onFileDrop)="fileSelected($event)"
+         [uploader]="uploader">
+
+      <i class="fa fa-file-upload"></i>
+
+      <h4>Drag video to upload or </h4>
+
+      <label for="video-upload" class="sc-post-upload-modal__file-drop-btn btn btn-primary">Choose file</label>
+      <input id="video-upload"
+             type="file"
+             accept="video/mp4, video/quicktime, video/x-msvideo, video/x-ms-wmv, video/MP2T, application/x-mpegURL, video/x-flv"
+             ng2FileSelect
+             [uploader]="uploader"
+             (onFileSelected)="fileSelected($event)"/>
+    </div>
+
+    <div class="sc-post-upload-modal__preview clearfix" *ngIf="selectedFile">
+      <video class="col-3 sc-post-upload-modal__preview-video"
+             [src]="fileURL"
+             muted>
+      </video>
+
+      <textarea [(ngModel)]="description"
+                class="col-9 form-control sc-post-upload-modal__preview-description"
+                placeholder="Describe your post ..."
+                minlength="5"
+                rows="5">
+      </textarea>
+    </div>
+    <div [hidden]="!descriptionLengthError" class="alert alert-warning mt-2" role="alert">
+      Description must be at least 5 characters long!
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-danger" *ngIf="selectedFile" (click)="clearUpload()">
+      Clear
+    </button>
+    <button type="button"
+            class="btn btn-primary"
+            (click)="upload()"
+            [disabled]="!selectedFile || uploadInProgress">
+      Upload <span [hidden]="!uploadInProgress" class="fa fa-spinner fa-spin"></span>
+    </button>
+  </div>
+</div>

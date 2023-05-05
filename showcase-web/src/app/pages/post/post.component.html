@@ -1,0 +1,22 @@
+<h1></h1>
+<div class="sc-home">
+  <div class="row">
+    <div class="sc-home__posts col-12">
+      <sc-post-card *ngFor="let post of posts"
+                    [post]="post">
+      </sc-post-card>
+
+      <div *ngIf="!posts.length" class="alert alert-warning">No posts</div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12 m-4 text-center">
+      <button class="btn btn-info"
+              (click)="loadMore()"
+              *ngIf="showLoadMore"
+              [disabled]="isLoading">
+        Load more <span [hidden]="!isLoading" class="fa fa-spinner fa-spin"></span>
+      </button>
+    </div>
+  </div>
+</div>

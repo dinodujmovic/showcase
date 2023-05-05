@@ -1,0 +1,19 @@
+# Development
+# docker-compose up -d --build
+# docker exec -it showcase-angular-development npm run test --watch=false
+
+
+version: '3.7'
+
+services:
+  nginx:
+    container_name: showcase-angular-development
+    image: showcase-angular:development
+    build:
+      context: .
+      dockerfile: ./.docker/app.development.dockerfile
+    volumes:
+      - '.:/app'
+      - '/app/node_modules'
+    ports:
+      - 4200:4200

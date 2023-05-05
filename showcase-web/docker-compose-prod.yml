@@ -1,0 +1,14 @@
+# Production
+# docker-compose -f docker-compose-prod.yml up -d --build
+
+version: '3.7'
+
+services:
+  nginx:
+    container_name: showcase-angular-production
+    image: showcase-angular:production
+    build:
+      context: .
+      dockerfile: ./.docker/app.production.dockerfile
+    ports:
+      - 80:80

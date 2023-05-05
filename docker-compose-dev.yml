@@ -1,0 +1,84 @@
+version: '3.7'
+
+services:
+  nginx:
+    container_name: showcase-web_${APP_ENV}
+    image: showcase-web:${APP_ENV}
+    build:
+      context: ./showcase-web
+      dockerfile: ./.docker/app.${APP_ENV}.dockerfile
+    volumes:
+      - ./showcase-web:/app
+      - /app/node_modules
+    ports:
+      - 4200:4200
+    networks:
+      - webnet
+    depends_on:
+      - node
+
+  node:
+    container_name: showcase-api_${APP_ENV}
+    image: showcase-api:${APP_ENV}
+    build:
+      context: ./showcase-api
+      dockerfile: ./.docker/nestjs.${APP_ENV}.dockerfile
+    volumes:
+      - ./showcase-api:/usr/src/app
+      - /usr/src/app/node_modules
+      - logdata:/usr/src/app/logs
+      - nodedata:/usr/src/data
+    environment:
+      - NODE_ENV=${APP_ENV}
+      - CONTAINER=true
+    env_file:
+      - ./showcase-api/.docker/env/app.${APP_ENV}.env
+      - ./showcase-api/.docker/env/postgres.${APP_ENV}.env
+    ports:
+      - 3000:3000
+    networks:
+      - webnet
+    depends_on:
+      - postgres
+#      - redis
+
+#  redis:
+#    image: redis:latest
+#    container_name: redis
+#    build:
+#      context: ./showcase-api
+#      dockerfile: ./.docker/redis.${APP_ENV}.dockerfile
+#    ports:
+#      - 6379
+#    networks:
+#      - webnet
+
+  postgres:
+    image: postgres:12
+    container_name: showcase-postgres_${APP_ENV}
+    env_file:
+      - ./showcase-api/.docker/env/postgres.${APP_ENV}.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - webnet
+
+  flyway_postgres:
+    image: flyway
+    container_name: showcase-flyway_${APP_ENV}
+    build:
+      context: ./showcase-api
+      dockerfile: ./.docker/flyway.${APP_ENV}.dockerfile
+    depends_on:
+      - postgres
+    networks:
+      - webnet
+
+networks:
+  webnet:
+volumes:
+  pgdata:
+  nodedata:
+  logdata:

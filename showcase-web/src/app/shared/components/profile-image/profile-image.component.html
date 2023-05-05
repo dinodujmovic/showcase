@@ -1,0 +1,7 @@
+<img *ngIf="profileImg" [class]="classes"
+     [src]="mediaPath + profileImg"
+     onerror="this.src='assets/avatar.png';"
+/>
+
+<img *ngIf="!profileImg" class="sc-post__user-image"
+     src="assets/avatar.png">

@@ -1,0 +1,34 @@
+<nav class="sc-navbar navbar navbar-light">
+    <div class="container">
+        <h5 class="sc-navbar__brand"
+            [routerLink]="['/']">
+            Showcase
+        </h5>
+        <div *ngIf="!isAuthenticated"
+             class="sc-navbar__login"
+             [routerLink]="['/login']"
+             routerLinkActive="active">
+            Log in
+        </div>
+        <div *ngIf="isAuthenticated"
+             ngbDropdown
+             placement="bottom-right"
+             class="sc-navbar__user">
+
+            <div class="sc-navbar__avatar-container"
+                 ngbDropdownToggle>
+                <sc-profile-image [profileImg]="user?.profileImg"></sc-profile-image>
+            </div>
+
+            <div class="sc-navbar__dropdown-menu" ngbDropdownMenu>
+                <button ngbDropdownItem [routerLink]="['/profile']">Profile</button>
+                <button ngbDropdownItem (click)="logout()">Logout</button>
+            </div>
+
+            <button class="btn btn-primary sc-navbar__upload"
+                    (click)="createPost()">
+                Upload
+            </button>
+        </div>
+    </div>
+</nav>

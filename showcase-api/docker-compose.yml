@@ -1,0 +1,81 @@
+# 1. Update config values (localhost --> mongo and localhost --> redis) in config/config.development.json if necessary.
+# 2. Set APP_ENV environment variable by running the following command in your command window (see the notes below if on Windows).
+#    export APP_ENV=development or export APP_ENV=production
+
+#    For the standard Windows DOS command shell use `set` instead of `export` for environment variables.
+#    For Windows Powershell use `$env:APP_ENV = "value"`.
+
+# 3. Remove "node" service `volume` (below) if doing a production build
+# 4. Run docker-compose build
+# 5. Run docker-compose up
+
+# IF development - uncomment commented volumes for live reload
+
+version: '3.7'
+
+services:
+  node:
+    image: showcase-nestjs:${APP_ENV}
+    container_name: showcase-nestjs-${APP_ENV}
+    build:
+      context: .
+      dockerfile: ./.docker/nestjs.${APP_ENV}.dockerfile
+    volumes:
+      - .:/usr/src/app  # comment for production
+      - /usr/src/app/node_modules # comment for production
+      - logdata:/usr/src/app/logs
+      - nodedata:/usr/src/data
+    environment:
+      - NODE_ENV=${APP_ENV}
+      - CONTAINER=true
+    env_file:
+      - ./.docker/env/app.${APP_ENV}.env
+      - ./.docker/env/postgres.${APP_ENV}.env
+    ports:
+      - 3000:3000
+    networks:
+      - webnet
+    depends_on:
+#      - redis
+      - postgres
+
+#  redis:
+#    image: redis:latest
+#    container_name: redis
+#    build:
+#      context: .
+#      dockerfile: ./.docker/redis.${APP_ENV}.dockerfile
+#    ports:
+#      - 6379
+#    networks:
+#      - webnet
+
+  postgres:
+    image: postgres:12
+    container_name: postgres
+    env_file:
+      - ./.docker/env/postgres.${APP_ENV}.env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    networks:
+      - webnet
+
+  flyway_postgres:
+    image: flyway
+    container_name: flyway
+    build:
+      context: .
+      dockerfile: ./.docker/flyway.${APP_ENV}.dockerfile
+    depends_on:
+      - postgres
+    networks:
+      - webnet
+
+networks:
+  webnet:
+volumes:
+  pgdata:
+  nodedata:
+  logdata:

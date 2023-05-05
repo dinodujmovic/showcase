@@ -1,0 +1,84 @@
+{
+    "root": true,
+    "ignorePatterns": [
+        "projects/**/*"
+    ],
+    "plugins": ["unused-imports", "simple-import-sort"],
+    "parserOptions": {
+        "project": "./tsconfig.json"
+    },
+    "overrides": [
+        {
+            "files": [
+                "*.ts"
+            ],
+            "extends": [
+                "airbnb-base",
+                "airbnb-typescript/base",
+                "plugin:@typescript-eslint/recommended",
+                "plugin:@angular-eslint/recommended",
+                "plugin:@angular-eslint/template/process-inline-templates"
+            ],
+            "rules": {
+                // ESLint rules
+                "no-underscore-dangle": "off",
+                "import/prefer-default-export": "off",
+                "import/no-unresolved": "off",
+                "import/extensions": "off",
+                "simple-import-sort/imports": "error",
+                "simple-import-sort/exports": "error",
+                "import/first": "error",
+                "import/newline-after-import": "error",
+                "import/no-duplicates": "error",
+                "max-len": [
+                    "error",
+                    150
+                ],
+                "no-useless-constructor": "off",
+                "class-methods-use-this": "off",
+                "max-classes-per-file": "off",
+                // eslint-plugin-unused-imports rules
+                "unused-imports/no-unused-imports": "off",
+                "unused-imports/no-unused-vars": "off",
+                // TypeScript Eslint rules
+                "@typescript-eslint/no-useless-constructor": "off",
+                "@typescript-eslint/default-param-last": "off",
+                "@typescript-eslint/indent": [
+                    "error",
+                    4
+                ],
+                "@typescript-eslint/comma-dangle": "off",
+                "@typescript-eslint/lines-between-class-members": "off",
+                "@typescript-eslint/quotes": ["error","double"],
+                "@typescript-eslint/no-shadow": "error",
+                "@typescript-eslint/no-explicit-any": 0,
+                "@typescript-eslint/no-unused-vars": "off",
+                // Angular ESLint rules
+                "@angular-eslint/directive-selector": [
+                    "error",
+                    {
+                        "type": "attribute",
+                        "prefix": "sc",
+                        "style": "camelCase"
+                    }
+                ],
+                "@angular-eslint/component-selector": [
+                    "error",
+                    {
+                        "type": "element",
+                        "prefix": "sc",
+                        "style": "kebab-case"
+                    }
+                ]
+            }
+        },
+        {
+            "files": [
+                "*.html"
+            ],
+            "extends": [
+                "plugin:@angular-eslint/template/recommended"
+            ]
+        }
+    ]
+}

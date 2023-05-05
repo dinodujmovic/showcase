@@ -1,0 +1,37 @@
+.sc-post-upload-modal {
+
+  &__file-drop {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+
+    &-btn {
+      margin-top: 20px;
+    }
+
+    &--over {
+      background: #ddd;
+    }
+
+    .fa-file-upload {
+      font-size: 50px;
+      margin-bottom: 20px
+    }
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+
+  &__preview {
+    &-video {
+      float: left;
+    }
+
+    &-description {
+      float: left;
+      resize: none;
+    }
+  }
+}

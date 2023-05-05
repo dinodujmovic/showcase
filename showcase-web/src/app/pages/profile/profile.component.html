@@ -1,0 +1,56 @@
+<div class="sc-profile">
+  <div class="row">
+    <div class="sc-profile__card col-md-6">
+      <div class="sc-profile__imageWrapper">
+        <sc-profile-image [profileImg]="user?.profileImg"></sc-profile-image>
+
+        <div class="file btn btn-lg btn-primary">
+          Change Photo
+          <input #imageInput type="file"
+                 name="file"
+                 accept="image/png,image/jpg,image/jpeg,image/gif"
+                 (change)="fileChangeEvent($event)"/>
+        </div>
+      </div>
+      <div class="profile-head">
+        <h5 class="sc-profile__userinfo">
+          <i class="sc-profile__icon far fa-user"></i>
+          <span class="sc-profile__username">{{ user?.username}}</span>
+          <span class="sc-profile__role badge badge-danger">{{ user?.role }}</span>
+        </h5>
+        <div class="sc-profile__email">
+          <a href="mailto:{{user?.email}}"><i class="fas fa-envelope"></i>&nbsp;<span>{{user?.email}}</span></a>
+        </div>
+        <button class="btn btn-success mt-5"
+                *ngIf="user?.role === 'ADMIN'"
+                [routerLink]="['/users']">
+          Show users
+        </button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- START: Image cropper modal template-->
+<ng-template #imageCropperModal let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title">Crop your new profile picture</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <image-cropper
+      [imageChangedEvent]="imageChangedEvent"
+      [maintainAspectRatio]="true"
+      [aspectRatio]="4 / 3"
+      format="png"
+      (imageCropped)="imageCropped($event)">
+    </image-cropper>
+  </div>
+  <div class="modal-footer">
+    <button class="btn btn-info" (click)="setNewProfileImage()">Set new profile picture</button>
+  </div>
+</ng-template>
+<!-- END: Image cropper modal template-->
