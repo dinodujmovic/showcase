@@ -2,7 +2,7 @@ import { forwardRef, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
-import * as uuid from 'uuid/v4';
+import * as uuid from 'uuid';
 import * as bcrypt from 'bcrypt';
 import * as fs from 'fs';
 
@@ -156,7 +156,12 @@ export class UserService {
   }
 
   public async setUserProfileImage(updateUserAvatar: UpdateUserAvatarDto): Promise<GetUserDto | undefined> {
-    const user: UserEntity = await this.userRepository.findOne(updateUserAvatar.userId);
+    const user: UserEntity = await this.userRepository.findOne({
+      select: ['id'],
+      where: {
+        id: updateUserAvatar.userId
+      }
+    });
 
     if (!user) {
       this.logger.error(`[setUserProfileImage] User not found (ID: ${user.id})`, '');
